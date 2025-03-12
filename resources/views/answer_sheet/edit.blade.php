@@ -1,6 +1,18 @@
 
 @extends('layout.layout')
 @section('content')
+    <style>
+        .backGround{
+            background: linear-gradient(
+                to bottom,
+                #a0aec0 0%,
+                #a0aec0 25%,
+                #f8f9fa 75%,
+                #f8f9fa 100%
+            );
+            height: 84%;
+        }
+    </style>
     <div class="container">
         <div class="row pt-3 pb-5 text-center mx-auto">
             <h1>{{__("Edit Answer Sheet")}}</h1>

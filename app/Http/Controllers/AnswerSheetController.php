@@ -72,6 +72,11 @@ class AnswerSheetController extends Controller
                 $answerSheet->description = $answerSheetDescription;
                 $answerSheet->group_number = $i+1;
                 $answerSheet->save();
+//                $test = new Test();
+//                $test->answer_sheet_id = $answerSheet->id;
+//                $test->user_id = auth()->user()->id;
+//                $test->status = 'new';
+//                $test->save();
                 $randomQuestions = [];
                 $usedQuestions = [];
                 for ($j = 0; $j < $numberOfQuestions; $j++) {

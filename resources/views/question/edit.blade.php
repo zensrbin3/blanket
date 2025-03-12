@@ -8,7 +8,17 @@
 
 @extends('layout.layout')
 @section('content')
-
+    <style>
+        .backGround{
+            background: linear-gradient(
+                to bottom,
+                #a0aec0 0%,
+                #a0aec0 25%,
+                #f8f9fa 75%,
+                #f8f9fa 100%
+            );
+        }
+    </style>
 <div class="container">
 
     <div class="row">

@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Support\Facades\Route;
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth','admin'])->group(function () {
     Route::get("/question/create", [\App\Http\Controllers\QuestionController::class, "create"])->name("question.create");
     Route::post("/question/store", [\App\Http\Controllers\QuestionController::class, "store"])->name("question.store");
     Route::get("/question/index", [\App\Http\Controllers\QuestionController::class, "index"])->name("question.index");

@@ -4,49 +4,104 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
 
 @extends('layout.layout')
+
 @section('content')
-    <x-auth-card>
-      <x-auth-session-status class="mb-4" :status="session('status')" />
+    <style>
+        .auth-card-custom {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 400px;
+            margin: 3rem auto;
+        }
+        .auth-card-custom h1 {
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        .auth-card-custom .form-control {
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .auth-card-custom .btn-custom {
+            background-color: #2575fc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .auth-card-custom .btn-custom:hover {
+            background-color: #6a11cb;
+        }
+        .auth-card-custom .remember-me {
+            font-size: 0.9rem;
+            color: #333;
+        }
+        .auth-card-custom .forgot-link {
+            font-size: 0.9rem;
+            color: #2575fc;
+            text-decoration: none;
+        }
+        .auth-card-custom .forgot-link:hover {
+            text-decoration: underline;
+        }
+        .backGround{
+            background: linear-gradient(
+                to bottom,
+                #a0aec0 0%,
+                #a0aec0 25%,
+                #f8f9fa 75%,
+                #f8f9fa 100%
+            );
+            height: 84%;
+        }
+    </style>
+
+    <div class="auth-card-custom">
+        <x-auth-session-status class="mb-4" :status="session('status')" />
 
         <!-- Validation Errors -->
-       <x-auth-validation-errors class="mb-4 text-center alert alert-danger " :errors="$errors" />
-        <h1 class="pt-3 text-center mb-2 mt-2">Login</h1>
-        <form method="POST" action="{{ route('login') }}" class="text-center d-flex flex-column align-items-center">
+        <x-auth-validation-errors class="mb-4 text-center alert alert-danger" :errors="$errors" />
+
+        <h1 class="text-center">Login</h1>
+        <form method="POST" action="{{ route('login') }}" class="text-center">
             @csrf
 
             <!-- Email Address -->
-            <div class="col-10 col-sm-3 mt-3 text-start">
+            <div class="mb-3 text-start">
                 <x-label for="email" :value="__('Email')" class="form-label" />
-                <x-input id="email" class="block mt-0 w-full form-control" type="email" name="email" :value="old('email')" required autofocus />
+                <x-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autofocus />
             </div>
 
             <!-- Password -->
-            <div class="col-10 col-sm-3 mt-2 text-start">
+            <div class="mb-3 text-start">
                 <x-label for="password" :value="__('Password')" class="form-label" />
-                <x-input id="password" class="block mt-0 w-full form-control" type="password" name="password" required autocomplete="current-password" />
+                <x-input id="password" class="form-control" type="password" name="password" required autocomplete="current-password" />
             </div>
 
             <!-- Remember Me -->
-            <div class="col-10 col-sm-3 mt-4 text-start">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="form-check-input text-indigo-600 focus:border-indigo-300 focus:ring focus:ring-indigo-200" name="remember" style="margin-left: 0.3rem;">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
+            <div class="mb-3 text-start">
+                <div class="form-check">
+                    <x-input id="remember_me" type="checkbox" class="form-check-input" name="remember" />
+                    <label for="remember_me" class="form-check-label remember-me">
+                        {{ __('Remember me') }}
+                    </label>
+                </div>
             </div>
 
-            <!-- Buttons -->
-            <div class="col-10 col-sm-3  row flex items-center justify-end mt-4 me-2">
-                <div class="col-auto">
-                    <x-input.button text="Login"/>
-                </div>
-                <div class="col-auto pt-1">
-                    @if (Route::has('password.request'))
-                        <a class="" href="{{ route('password.request') }}">
-                            {{ __('Forgot your password?') }}
-                        </a>
-                    @endif
-                </div>
+            <!-- Dugme i link -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <button type="submit" class="btn-custom">Login</button>
+                @if (Route::has('password.request'))
+                    <a class="forgot-link" href="{{ route('password.request') }}">
+                        {{ __('Forgot your password?') }}
+                    </a>
+                @endif
             </div>
         </form>
-    </x-auth-card>
+    </div>
 @endsection
+

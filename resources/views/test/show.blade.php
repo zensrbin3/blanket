@@ -1,12 +1,32 @@
 @extends('layout.layout')
 
 @section('content')
+    <style>
+        .backGround{
+            background: linear-gradient(
+                to bottom,
+                #f8f9fa 0%,
+                #f8f9fa 25%,
+                #a0aec0 75%,
+                #a0aec0 100%
+            );
+        }
+        .backgroundCard{
+            background:linear-gradient(
+                to bottom,
+                #f8f9fa 0%,
+                #f8f9fa 25%,
+                #a0aec0 75%,
+                #a0aec0 100%
+            );
+        }
+    </style>
     <div class="container mt-5">
         <h2 class="mb-4">Test: {{ $name }}</h2>
         <form action="{{ route('test.update', $test) }}" method="POST">
             @csrf
             @foreach($sheetQuestions as $questionIndex => $sheetQuestion)
-                <div class="mb-4 p-3 border rounded">
+                <div class="mb-4 p-3 border rounded backgroundCard">
                     <table>
                         <td style="width: 20px; text-align: center; vertical-align: top; padding-top: 10px;" class="fw-bold">{{$questionIndex + 1}})</td>
                         <td style="padding: 10px 10px 10px 5px;">{!! $sheetQuestion->question_description !!}</td>
