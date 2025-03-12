@@ -13,7 +13,7 @@
                             <a class="nav-link" href="{{ route('answer_sheet.index') }}">{{ __("Answer Sheets") }}</a>
                         </li>
                         <li>
-                            <a class="nav-link" href="{{route('admin.test.add')}}">Add test for user</a>
+                            <a class="nav-link" href="{{route('admin.test.index')}}">Add test for user</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

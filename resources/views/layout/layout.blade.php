@@ -63,7 +63,6 @@
 <body class="d-flex flex-column min-vh-100">
 <x-layouts.navigation/>
 
-<!-- Centralni kontejner se rasteže -->
 <div class="flex-grow-1 backGround">
     @yield('content')
 </div>
