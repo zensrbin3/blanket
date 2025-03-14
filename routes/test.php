@@ -12,5 +12,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/test/show/{test}/update', [TestController::class, 'update'])
         ->name('test.update');
+
+    Route::get('/test/show/{test}/update/{numberOfTrueAnswers}/{i}', [TestController::class, 'seeResult'])
+        ->name('test.seeResult');
 });
 

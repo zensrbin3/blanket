@@ -36,13 +36,26 @@ class TestController
     public function update(Request $request,Test $test)
     {
         $i=0;
+        $numberOfTrueAnswers = 0;
         $answerSheet = $test->answerSheet;
         $answerSheetQuestions = $answerSheet->answer_sheet_question;
         $selectedAnswers = $request->get('answers');
         foreach ($answerSheetQuestions as $question) {
-            $test->testQuestionAnswers()->attach($question->id, ['answer_sheet_question_answer_id' => $selectedAnswers[$i++]]);
+            $selectedAnswer = $selectedAnswers[$i];
+            $test->testQuestionAnswers()->attach($question->id, ['answer_sheet_question_answer_id' => $selectedAnswer]);
+            $correctAnswer = $question->answer_sheet_question_answer->where('is_correct',true)->first();
+            if($selectedAnswer == $correctAnswer->id){
+               $numberOfTrueAnswers += 1;
+            }
+            $i++;
         }
         $test->update(['status' => 'completed']);
-        return redirect()->route('test.index')->with('success', 'Test completed successfully');
+        return redirect()->route('test.seeResult',[$test,$numberOfTrueAnswers,$i]);
+    }
+
+    public function seeResult(Test $test,$numberOfTrueAnswers,$numberOfQuestions){
+        $percentage = $numberOfTrueAnswers/$numberOfQuestions*100;
+        $name = $test->answerSheet->description;
+        return view('test.result', ['percentage' => $percentage,'name'=>$name]);
     }
 }
