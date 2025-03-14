@@ -1,7 +1,18 @@
 
 @extends('layout.layout')
 @section('content')
-
+    <style>
+        .backGround{
+            background: linear-gradient(
+                to bottom,
+                #a0aec0 0%,
+                #a0aec0 25%,
+                #f8f9fa 75%,
+                #f8f9fa 100%
+            );
+            height: 84%;
+        }
+    </style>
 @if(Session::has('flash_msg'))
     <div id="flashMsg" class="alert alert-success text-center" data-tip="{{ Session::get('flash_type') }}" >{{ Session::get('flash_msg') }}</div>
 @endif
