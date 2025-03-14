@@ -30,8 +30,14 @@
                 #a0aec0 100%
             );
         }
-        .btnHover:hover{
+        .view:hover{
             background-color: dodgerblue;
+        }
+        .start{
+            background-color: green;
+        }
+        .start:hover{
+            background-color: darkgreen;
         }
     </style>
     <div class="container mt-5">
@@ -51,9 +57,15 @@
                                 <p class="card-text">
                                     <strong>Group:</strong> {{ $test->answerSheet->group_number }}<br>
                                 </p>
-                                <a href="{{ route('test.show', $test->id) }}" class="btn btn-primary btnHover">
-                                   Start test
-                                </a>
+                                @if($test->status=='new')
+                                    <a href="{{ route('test.show', $test->id) }}" class="btn btn-primary start">
+                                       Start test
+                                    </a>
+                                @elseif($test->status='completed')
+                                    <a href="{{route('test.results',$test->id)}}" class="btn btn-primary view">
+                                        View test
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </div>

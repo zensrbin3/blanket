@@ -44,10 +44,10 @@
             <h1 class="mb-3">Na testu: {{ $name }}</h1>
             <h2 class="mb-4">Osvojili ste: {{ $percentage }}%</h2>
             <div class="d-grid gap-3">
-                <a href="" class="btn btn-gradient">
+                <a href="{{route('test.currentResult',$test)}}" class="btn btn-gradient">
                     View correct answers
                 </a>
-                <a href="" class="btn btn-gradient">
+                <a href="{{route('test.index')}}" class="btn btn-gradient">
                     Back to test/s
                 </a>
             </div>

@@ -19,4 +19,8 @@ class AnswerSheetQuestion extends Model
     {
         return $this->hasMany(AnswerSheetQuestionAnswer::class);
     }
+
+    public function testAnswer(): HasMany {
+        return $this->hasMany(TestQuestionAnswers::class);
+    }
 }

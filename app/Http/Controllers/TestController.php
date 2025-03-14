@@ -37,25 +37,60 @@ class TestController
     {
         $i=0;
         $numberOfTrueAnswers = 0;
-        $answerSheet = $test->answerSheet;
-        $answerSheetQuestions = $answerSheet->answer_sheet_question;
+        $trueAnswers = [];
+        $answerSheetQuestions = $test->answerSheet->answer_sheet_question;
         $selectedAnswers = $request->get('answers');
         foreach ($answerSheetQuestions as $question) {
             $selectedAnswer = $selectedAnswers[$i];
             $test->testQuestionAnswers()->attach($question->id, ['answer_sheet_question_answer_id' => $selectedAnswer]);
             $correctAnswer = $question->answer_sheet_question_answer->where('is_correct',true)->first();
+            $trueAnswers[$i]=$correctAnswer->id;
             if($selectedAnswer == $correctAnswer->id){
                $numberOfTrueAnswers += 1;
             }
             $i++;
         }
         $test->update(['status' => 'completed']);
-        return redirect()->route('test.seeResult',[$test,$numberOfTrueAnswers,$i]);
+        session(['selectedAnswers' => $selectedAnswers]);
+        session(['trueAnswers' => $trueAnswers]);
+        return redirect()->route('test.percentage',[$test,$numberOfTrueAnswers,count($trueAnswers)]);
     }
 
-    public function seeResult(Test $test,$numberOfTrueAnswers,$numberOfQuestions){
+    public function percentage(Test $test,$numberOfTrueAnswers,$numberOfQuestions){
         $percentage = $numberOfTrueAnswers/$numberOfQuestions*100;
         $name = $test->answerSheet->description;
-        return view('test.result', ['percentage' => $percentage,'name'=>$name]);
+        return view('test.percentage', [
+            'percentage'      => $percentage,
+            'name'            => $name,
+            'test'            => $test,
+        ]);
+    }
+
+    public function currentResult(Test $test){
+        $answerSheetQuestions = $test->answerSheet->answer_sheet_question;
+        $selectedAnswers = session('selectedAnswers', []);
+        $trueAnswers = session('trueAnswers', []);
+        return view('test.current_result', [
+            'answerSheetQuestions'=> $answerSheetQuestions,
+            'selectedAnswers' => $selectedAnswers,
+            'trueAnswers' => $trueAnswers,
+            'name' => $test->answerSheet->description
+        ]);
+    }
+
+    public function results(Test $test){
+        $selectedAnswers=[];
+        $trueAnswers=[];
+        $answerSheetQuestions = $test->answerSheet->answer_sheet_question;
+        foreach($answerSheetQuestions as $question){
+            $trueAnswers[] = $question->answer_sheet_question_answer->where('is_correct',true)->first()->id;
+            $selectedAnswers[] = $question->testAnswer()->value('answer_sheet_question_answer_id');
+        }
+        return view('test.results',[
+            'name' => $test->answerSheet->description,
+            'answerSheetQuestions'=> $answerSheetQuestions,
+            'selectedAnswers' => $selectedAnswers,
+            'trueAnswers' => $trueAnswers
+        ]);
     }
 }
