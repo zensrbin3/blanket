@@ -92,6 +92,12 @@
                 </div>
             </div>
 
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a class="forgot-link" href="{{ route('register') }}">
+                        Create a new account?
+                    </a>
+            </div>
+
             <!-- Dugme i link -->
             <div class="d-flex justify-content-between align-items-center mt-4">
                 <button type="submit" class="btn-custom">Login</button>
