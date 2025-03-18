@@ -13,9 +13,6 @@
             height: 84%;
         }
     </style>
-    @if(Session::has('flash_msg'))
-        <div id="flashMsg" class="alert alert-success text-center" data-tip="{{ Session::get('flash_type') }}" >{{ Session::get('flash_msg') }}</div>
-    @endif
 
     <div class="container">
 
@@ -56,12 +53,14 @@
                 </tr>
                 @foreach($answer_sheets as $sheet)
                     <tr class="table-light">
-                        <td class="align-middle">{{$loop->iteration}}</td>
-                        <td class="align-middle">{{ \Illuminate\Support\Str::limit($sheet->description,30,'...')}}</td>
-                        <td class="align-middle">{{$sheet->group_number}}</td>
-                        <td class="align-middle">{{$sheet->created_at}}</td>
-                        <td class="text-end">
-                            <div class="d-inline"> <!-- Možeš koristiti d-inline ili d-flex ovde -->
+                        <td class="align-middle">{{ $loop->iteration }}</td>
+                        <td class="align-middle sheet-description" data-sheet-id="{{ $sheet->id }}">
+                            {{ $sheet->description }}
+                        </td>
+                        <td class="align-middle">{{ $sheet->group_number }}</td>
+                        <td class="align-middle">{{ $sheet->created_at }}</td>
+                        <td class="text-end action-cell">
+                            <div class="d-inline action-buttons">
                                 <div class="dropdown col-auto d-inline">
                                     <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="bi bi-eye-fill"></i> {{ __("Print") }}
@@ -79,20 +78,85 @@
                                         </li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-outline-dark d-inline" onclick="location.href='{{ route('answer_sheet.edit',$sheet) }}'" type="button">
+                                <button class="btn btn-outline-dark d-inline edit-btn" data-sheet-id="{{ $sheet->id }}" type="button">
                                     <i class="bi bi-pencil-fill"></i> {{ __("Edit") }}
                                 </button>
-                                <button class="btn btn-outline-dark d-inline" onclick="location.href='{{ route('answer_sheet.destroy',$sheet) }}'" type="button">
+                                <button class="btn btn-outline-dark d-inline" onclick="location.href='{{ route('answer_sheet.destroy', $sheet) }}'" type="button">
                                     <i class="bi bi-trash3-fill"></i> {{ __("Delete") }}
                                 </button>
                             </div>
                         </td>
-                </tr>
+                    </tr>
                 @endforeach
 
             </table>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listener za klik na edit dugme
+            document.querySelectorAll('.edit-btn').forEach(function(editBtn) {
+                editBtn.addEventListener('click', function() {
+                    var sheetId = this.getAttribute('data-sheet-id');
+                    // Pronađi red (tr) u kojem se nalazi dugme
+                    var row = this.closest('tr');
+                    // Pronađi ćeliju sa opisom
+                    var descCell = row.querySelector('.sheet-description');
+                    var currentDesc = descCell.innerText.trim();
+
+                    // Zamenite sadržaj ćelije input poljem sa trenutnim opisom
+                    descCell.innerHTML = '<input type="text" class="form-control edit-input" value="'+currentDesc+'">';
+
+                    // Sakrij akcione dugmiće
+                    var actionDiv = row.querySelector('.action-buttons');
+                    actionDiv.classList.add('d-none');
+
+                    // Kreiraj novo dugme "Save" i dodaj ga u ćeliju akcija (action-cell)
+                    var actionCell = row.querySelector('.action-cell');
+                    var saveBtn = document.createElement('button');
+                    saveBtn.type = 'button';
+                    saveBtn.className = 'btn btn-success save-btn';
+                    saveBtn.innerHTML = '<i class="bi bi-check-lg"></i> Save';
+                    // Dodaj dugme "Save" na kraj ćelije (ili ga postavi gde želiš)
+                    actionCell.appendChild(saveBtn);
+
+                    // Dodaj event listener za save dugme
+                    saveBtn.addEventListener('click', function() {
+                        var newDesc = row.querySelector('.edit-input').value;
+                        // AJAX zahtev za update
+                        fetch("{{ route('answer_sheet.update') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                id: sheetId,
+                                description: newDesc
+                            })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if(data.success) {
+                                    // Ako je uspešno, ažuriraj tekst u ćeliji
+                                    descCell.innerText = newDesc;
+                                    // Ukloni dugme "Save"
+                                    saveBtn.remove();
+                                    // Prikaži originalne akcione dugmiće
+                                    actionDiv.classList.remove('d-none');
+                                } else {
+                                    alert('Update failed: ' + data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('An error occurred.');
+                            });
+                    });
+                });
+            });
+        });
+    </script>
 
 
 @endsection

@@ -172,26 +172,18 @@ class AnswerSheetController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, AnswerSheet $answerSheet)
+    public function update(Request $request)
     {
-        $validator = Validator::make($request->input(), [
-            'description' => 'required|max:255',
-        ], []);
-
-        $validated = $validator->validate();
-        if($validated) {
-            $answerSheetDescription = $request->get('description');
-            $answerSheet->description = $answerSheetDescription;
-            $answerSheet->save();
-            session()->flash('flash_type', 'success');
-            session()->flash('flash_msg', 'Data has been edited successfully');
-            return redirect(route("answer_sheet.index"));
-        } else {
-            return redirect(route("answer_sheet.edit", $answerSheet));
-        }
-
+        $data = $request->validate([
+            'id' => 'required|integer|exists:answer_sheets,id',
+            'description' => 'required|string',
+        ]);
+        $sheet = AnswerSheet::find($data['id']);
+        $sheet->description = $data['description'];
+        $sheet->save();
+        return response()->json(['success' => true]);
     }
 
     /**
