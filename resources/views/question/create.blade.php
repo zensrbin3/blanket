@@ -31,7 +31,9 @@
     <div class="mb-3">
         <div>
             <label class="form-label " for="question_text" >{{ __("Question text:") }}</label>
-            <div id="editor0" class="quill-editor" style="height: 200px;"></div>
+            <div id="editor0" class="quill-editor" style="height: 200px;">
+                {!! old('question_text') !!}
+            </div>
             <input type="hidden" name="question_text">
             @error('question_text')
             <div class="alert alert-danger">{{ $message }}</div>
@@ -44,7 +46,9 @@
             <div class="row mb-5 g-3">
                 <div class="col-auto"><label class="form-label">{{$i+1}}) </label> </div>
                 <div class="col-6">
-                    <div id="editor{{$i}}" class="quill-editor"></div>
+                    <div id="editor{{$i}}" class="quill-editor">
+                        {!! old("answers.$i") !!}
+                    </div>
                     <input type="hidden" name="answers[{{$i}}]">
                 </div>
                 <div class="col-auto"><input class="form-check-input  {{ $errors->has("correct_answer") ? "is-invalid" : " " }}" type="radio"  name="correct_answer" value="{{$i}}" {{ old("correct_answer") == "$i" ? 'checked' : '' }}></div>

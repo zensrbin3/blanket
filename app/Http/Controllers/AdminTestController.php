@@ -16,6 +16,9 @@ class AdminTestController
     }
 
     public function store(Request $request){
+        if($request->assignment==null){
+            return redirect()->route('admin.test.index')->with('error','You have not selected any tests.');
+        }
         foreach ($request->assignment as $userId=>$answerSheetId){
             $test = new Test();
             $test->user()->associate($userId);
