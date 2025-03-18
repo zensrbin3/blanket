@@ -19,12 +19,14 @@ class AdminTestController
         if($request->assignment==null){
             return redirect()->route('admin.test.index')->with('error','You have not selected any tests.');
         }
-        foreach ($request->assignment as $userId=>$answerSheetId){
-            $test = new Test();
-            $test->user()->associate($userId);
-            $test->answerSheet()->associate($answerSheetId);
-            $test->status = 'new';
-            $test->save();
+        foreach ($request->assignment as $userId => $answerSheetId) {
+            foreach ((array)$answerSheetId as $sheetId) {
+                $test = new Test();
+                $test->user()->associate($userId);
+                $test->answerSheet()->associate($sheetId);
+                $test->status = 'new';
+                $test->save();
+            }
         }
         return redirect()->route('admin.test.index')->with('success', 'Tests added successfully');
     }
