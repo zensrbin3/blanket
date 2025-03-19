@@ -55,9 +55,11 @@ class AnswerSheetController extends Controller
      */
     public function store(Request $request)
     {
-        $allQuestionsNumber = Question::count();
+        $categoryId = $request->get('category_id');
+        $allQuestionsNumber = Question::forQuestion($categoryId)->count();
         $validator = Validator::make($request->input(), [
             'description' => 'required|max:255',
+            'category_id' => 'required',
             'number_of_questions' => 'required|integer|max:' . $allQuestionsNumber,
             'number_of_groups' => 'required|integer',
         ]);
@@ -72,11 +74,6 @@ class AnswerSheetController extends Controller
                 $answerSheet->description = $answerSheetDescription;
                 $answerSheet->group_number = $i+1;
                 $answerSheet->save();
-//                $test = new Test();
-//                $test->answer_sheet_id = $answerSheet->id;
-//                $test->user_id = auth()->user()->id;
-//                $test->status = 'new';
-//                $test->save();
                 $randomQuestions = [];
                 $usedQuestions = [];
                 for ($j = 0; $j < $numberOfQuestions; $j++) {
@@ -85,7 +82,7 @@ class AnswerSheetController extends Controller
                         $randomOffset = rand(0, $allQuestionsNumber - 1);
                     } while (in_array($randomOffset, $usedQuestions));
 
-                    $question = Question::query()->offset($randomOffset)->limit(1)->first();
+                    $question = Question::query()->offset($randomOffset)->where('category_id',$categoryId)->limit(1)->first();
                     $usedQuestions[$j]=$randomOffset;
                     $randomQuestions[$j] = $question;
                 }
