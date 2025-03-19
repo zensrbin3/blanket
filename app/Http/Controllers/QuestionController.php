@@ -30,7 +30,7 @@ class QuestionController extends Controller
             'answers' => 'required|array|size:4',
             'answers.*' => 'required|string|min:1',
             'correct_answer' => 'required',
-
+            'category_id' => 'required',
         ], [
             'correct_answer.required' => 'Select true answer',
         ]);
@@ -40,9 +40,10 @@ class QuestionController extends Controller
             if($validated) {
 
                 $questionText = $request->get('question_text');
-
+                $categoryId = $request->get('category_id');
                 $question = new Question();
                 $question->question_description = $questionText;
+                $question->category_id = $categoryId;
                 $question->save();
 
                 $answers = $request->get("answers");

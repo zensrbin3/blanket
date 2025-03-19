@@ -1,3 +1,4 @@
+@php use App\Models\Category; @endphp
 
 @extends('layout.layout')
 @section('content')
@@ -28,6 +29,18 @@
                 </div>
             </div>
 
+            <div class="mb-3 col-11 col-sm-4 mx-auto">
+                <label class="form-label">{{ __("Category of questions:") }}</label>
+                <select name="category_id" class="form-select">
+                    <option value="">{{ __("Select a category") }}</option>
+                    @foreach(Category::all() as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            @error('category_id')
+                <div class="alert alert-danger mb-3 col-11 col-sm-4 mx-auto">{{ $message }}</div>
+            @enderror
             <div class="mb-3 col-11  col-sm-4 mx-auto">
                 <label class="form-label"> {{ __("Number of questions:") }} </label><br>
                 <x-input.number  name="number_of_questions"  placeholder="Enter number" number=""/>

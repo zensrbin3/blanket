@@ -34,11 +34,31 @@
             <div id="editor0" class="quill-editor" style="height: 200px;">
                 {!! old('question_text') !!}
             </div>
-            <input type="hidden" name="question_text">
+            <input type="hidden" name="question_text" value="{!! old('question_text') !!}">
             @error('question_text')
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">{{ __("Question Category:") }}</label>
+        <select name="category_id" class="form-select" style="width: 20%; background:linear-gradient(
+         to bottom,
+            #a0aec0 0%,
+            #a0aec0 25%,
+            #a0aec0 75%,
+            #f8f9fa 100%
+        ); ">
+            <option value="">{{ __("Select a category") }}</option>
+            @foreach(\App\Models\Category::all() as $category)
+                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select>
+        @error('category_id')
+        <div class="alert alert-danger mt-2">{{ $message }}</div>
+        @enderror
     </div>
     <div class="mb-3">
         <label class="form-label"> {{ __("Answers:") }} </label><br>
@@ -49,7 +69,7 @@
                     <div id="editor{{$i}}" class="quill-editor">
                         {!! old("answers.$i") !!}
                     </div>
-                    <input type="hidden" name="answers[{{$i}}]">
+                    <input type="hidden" name="answers[{{$i}}]" value="{!! old("answers.$i") !!}">
                 </div>
                 <div class="col-auto"><input class="form-check-input  {{ $errors->has("correct_answer") ? "is-invalid" : " " }}" type="radio"  name="correct_answer" value="{{$i}}" {{ old("correct_answer") == "$i" ? 'checked' : '' }}></div>
             </div>
