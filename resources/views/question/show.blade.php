@@ -33,9 +33,9 @@
         @foreach($question->answer as $answer)
         <div class="row">
             @if($answer->is_correct)
-                <h4 class="bg-info border-secondary rounded-pill">{{ strip_tags($answer->answer_description) }}</h4>
+                <x-trueAnswer description="{{ strip_tags($answer->answer_description) }}"/>
             @else
-                <h4 class="bg-light border-secondary rounded-pill">{{ strip_tags($answer->answer_description) }}</h4>
+                <x-wrongAnswer description="{{ strip_tags($answer->answer_description) }}"/>
             @endif
 
         </div>

@@ -29,11 +29,11 @@
             text-decoration: underline;
         }
         /* Stilizacija radio dugmića sa animacijom */
-        .radio-custom input[type="radio"] {
+        .checkbox-custom input[type="checkbox"] {
             accent-color: #2575fc;
             transition: transform 0.3s ease;
         }
-        .radio-custom input[type="radio"]:hover {
+        .checkbox-custom input[type="checkbox"]:hover {
             transform: scale(1.2);
         }
         /* Fade in animacija za ceo kontejner */
@@ -63,12 +63,12 @@
                 <div class="user-row mb-3 p-3 border rounded">
                     <h5>Name: {{ $user->name }}</h5>
                     <p>Email: {{ $user->email }}</p>
-                    <div class="ms-3 radio-custom">
+                    <div class="ms-3 checkbox-custom">
                         <label class="form-label fw-bold">Assign Test:</label>
                         <div class="d-flex flex-wrap">
                             @foreach($answerSheets as $sheet)
                                 <div class="form-check me-3">
-                                    <input class="form-check-input" type="radio" name="assignment[{{ $user->id }}]" value="{{ $sheet->id }}" id="user{{ $user->id }}sheet{{ $sheet->id }}"
+                                    <input class="form-check-input" type="checkbox" name="assignment[{{ $user->id }}][]" value="{{ $sheet->id }}" id="user{{ $user->id }}sheet{{ $sheet->id }}"
                                            @if(in_array($sheet->id, $assignedSheets)) disabled @endif>
                                     <label class="form-check-label" for="user{{ $user->id }}sheet{{ $sheet->id }}">
                                         {{ $sheet->description }}

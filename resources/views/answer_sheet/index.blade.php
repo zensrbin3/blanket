@@ -94,33 +94,21 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Event listener za klik na edit dugme
             document.querySelectorAll('.edit-btn').forEach(function(editBtn) {
                 editBtn.addEventListener('click', function() {
                     var sheetId = this.getAttribute('data-sheet-id');
-                    // Pronađi red (tr) u kojem se nalazi dugme
                     var row = this.closest('tr');
-                    // Pronađi ćeliju sa opisom
                     var descCell = row.querySelector('.sheet-description');
                     var currentDesc = descCell.innerText.trim();
-
-                    // Zamenite sadržaj ćelije input poljem sa trenutnim opisom
                     descCell.innerHTML = '<input type="text" class="form-control edit-input" value="'+currentDesc+'">';
-
-                    // Sakrij akcione dugmiće
                     var actionDiv = row.querySelector('.action-buttons');
                     actionDiv.classList.add('d-none');
-
-                    // Kreiraj novo dugme "Save" i dodaj ga u ćeliju akcija (action-cell)
                     var actionCell = row.querySelector('.action-cell');
                     var saveBtn = document.createElement('button');
                     saveBtn.type = 'button';
                     saveBtn.className = 'btn btn-success save-btn';
                     saveBtn.innerHTML = '<i class="bi bi-check-lg"></i> Save';
-                    // Dodaj dugme "Save" na kraj ćelije (ili ga postavi gde želiš)
                     actionCell.appendChild(saveBtn);
-
-                    // Dodaj event listener za save dugme
                     saveBtn.addEventListener('click', function() {
                         var newDesc = row.querySelector('.edit-input').value;
                         // AJAX zahtev za update
@@ -138,11 +126,8 @@
                             .then(response => response.json())
                             .then(data => {
                                 if(data.success) {
-                                    // Ako je uspešno, ažuriraj tekst u ćeliji
                                     descCell.innerText = newDesc;
-                                    // Ukloni dugme "Save"
                                     saveBtn.remove();
-                                    // Prikaži originalne akcione dugmiće
                                     actionDiv.classList.remove('d-none');
                                 } else {
                                     alert('Update failed: ' + data.message);
