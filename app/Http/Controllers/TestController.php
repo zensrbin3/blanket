@@ -9,6 +9,7 @@ use App\Models\AnswerSheetQuestionAnswer;
 use App\Models\Question;
 use App\Models\Test;
 use App\Models\TestQuestionAnswers;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -51,14 +52,16 @@ class TestController
             $i++;
         }
         $test->update(['status' => 'completed']);
+        $percentage = count($trueAnswers) > 0 ? ($numberOfTrueAnswers / count($trueAnswers)) * 100 : 0;
+        $test->update(['percentage' =>  $percentage]);
         session(['selectedAnswers' => $selectedAnswers]);
         session(['trueAnswers' => $trueAnswers]);
-        return redirect()->route('test.percentage',[$test,$numberOfTrueAnswers,count($trueAnswers)]);
+        return redirect()->route('test.percentage',[$test]);
     }
 
-    public function percentage(Test $test,$numberOfTrueAnswers,$numberOfQuestions){
-        $percentage = $numberOfTrueAnswers/$numberOfQuestions*100;
+    public function percentage(Test $test){
         $name = $test->answerSheet->description;
+        $percentage = $test->percentage;
         return view('test.percentage', [
             'percentage'      => $percentage,
             'name'            => $name,
@@ -92,5 +95,20 @@ class TestController
             'selectedAnswers' => $selectedAnswers,
             'trueAnswers' => $trueAnswers
         ]);
+    }
+
+    public function filter(Request $request){
+        $query = Test::query();
+        $query->when($request->filled('category_id'), function($q) use ($request) {
+            $q->where('category_id', $request->category_id);
+        });
+        $query->when($request->filled('user_id'), function($q) use ($request) {
+            $q->where('user_id', $request->user_id);
+        });
+        $query->when($request->filled('percentage'), function($q) use ($request) {
+            $q->where('percentage', '>=', $request->percentage);
+        });
+        $tests = $query->get();
+        return view('test.filter',compact('tests'));
     }
 }

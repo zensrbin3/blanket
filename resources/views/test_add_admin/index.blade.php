@@ -68,7 +68,10 @@
                         <div class="d-flex flex-wrap">
                             @foreach($answerSheets as $sheet)
                                 <div class="form-check me-3">
-                                    <input class="form-check-input" type="checkbox" name="assignment[{{ $user->id }}][]" value="{{ $sheet->id }}" id="user{{ $user->id }}sheet{{ $sheet->id }}"
+                                    <input class="form-check-input" type="checkbox"
+                                           name="assignment[{{ $user->id }}][]"
+                                           value="{{ $sheet->id }}|{{ $sheet->category_id }}"
+                                           id="user{{ $user->id }}sheet{{ $sheet->id }}"
                                            @if(in_array($sheet->id, $assignedSheets)) disabled @endif>
                                     <label class="form-check-label" for="user{{ $user->id }}sheet{{ $sheet->id }}">
                                         {{ $sheet->description }}

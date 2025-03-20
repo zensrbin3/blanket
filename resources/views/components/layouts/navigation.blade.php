@@ -27,6 +27,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('test.index') }}">{{ __("Tests") }}</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('test.filterIndex')}}">{{ __("Filter tests")}}</a>
+                </li>
                 @endcan
                 @guest
                     <div class="col-auto mt-3">

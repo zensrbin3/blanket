@@ -72,6 +72,7 @@ class AnswerSheetController extends Controller
             for($i = 0; $i < $numberOfGroups; $i++) {
                 $answerSheet = new AnswerSheet();
                 $answerSheet->description = $answerSheetDescription;
+                $answerSheet->category_id = $categoryId;
                 $answerSheet->group_number = $i+1;
                 $answerSheet->save();
                 $randomQuestions = [];
