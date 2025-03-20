@@ -13,7 +13,7 @@ class Test extends Model
 {
     use HasFactory;
     protected $table = 'tests';
-    protected $fillable = ['answer_sheet_id','user_id','status'];
+    protected $fillable = ['answer_sheet_id','user_id','status','percentage'];
     public function answerSheet():BelongsTo{
         return $this->belongsTo(AnswerSheet::class);
     }
