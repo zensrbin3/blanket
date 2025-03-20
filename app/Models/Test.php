@@ -20,6 +20,9 @@ class Test extends Model
     public function user():BelongsTo{
         return $this->belongsTo(User::class);
     }
+    public function category():BelongsTo{
+        return $this->belongsTo(Category::class);
+    }
     public function testQuestionAnswers(): BelongsToMany
     {
         return $this->belongsToMany(AnswerSheetQuestion::class, 'test_question_answers')->withPivot('answer_sheet_question_answer_id');

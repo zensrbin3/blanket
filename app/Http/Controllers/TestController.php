@@ -109,7 +109,6 @@ class TestController
             $q->where('percentage', '>=', $request->percentage);
         });
         $tests = $query->get();
-        dd($tests);
         return view('test.filter',compact('tests'));
     }
 }
